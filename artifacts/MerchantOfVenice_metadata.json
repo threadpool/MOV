@@ -1,0 +1,574 @@
+{
+	"compiler": {
+		"version": "0.8.34+commit.80d5c536"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_antonio",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_loanAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_depositWindowSeconds",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_disbursementWindowSeconds",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_repaymentWindowSeconds",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "BondForfeited",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "disbursementDeadline",
+						"type": "uint256"
+					}
+				],
+				"name": "CollateralDeposited",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "CollateralReclaimed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [],
+				"name": "ContractCancelled",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "shylock",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "antonio",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "loanAmount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "collateralAmount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "depositDeadline",
+						"type": "uint256"
+					}
+				],
+				"name": "ContractCreated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "repaymentDeadline",
+						"type": "uint256"
+					}
+				],
+				"name": "LoanDisbursed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "repaymentAmount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "collateralReturned",
+						"type": "uint256"
+					}
+				],
+				"name": "LoanRepaid",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "antonio",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "cancel",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "claimBond",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "collateralAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "collateralDeposited",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "depositCollateral",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "depositDeadline",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "depositWindowSeconds",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "disburseLoan",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "disbursed",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "disbursementDeadline",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "disbursementWindowSeconds",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "loanAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reclaimCollateral",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "repay",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "repaymentDeadline",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "repaymentWindowSeconds",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "settled",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "shylock",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "timeToDepositDeadline",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "timeToDisbursementDeadline",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "timeToRepaymentDeadline",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"constructor": {
+					"params": {
+						"_antonio": "The borrower's wallet address.",
+						"_depositWindowSeconds": "Seconds Antonio has to deposit collateral.",
+						"_disbursementWindowSeconds": "Seconds Shylock has to disburse after deposit.",
+						"_loanAmount": "The loan amount in wei.",
+						"_repaymentWindowSeconds": "Seconds Antonio has to repay after disbursement."
+					}
+				}
+			},
+			"title": "MerchantOfVenice",
+			"version": 1
+		},
+		"userdoc": {
+			"events": {
+				"BondForfeited(uint256)": {
+					"notice": "Emitted when Shylock claims collateral after Antonio defaults."
+				},
+				"CollateralDeposited(uint256,uint256)": {
+					"notice": "Emitted when Antonio successfully deposits collateral."
+				},
+				"CollateralReclaimed(uint256)": {
+					"notice": "Emitted when Antonio reclaims collateral after Shylock fails to disburse."
+				},
+				"ContractCancelled()": {
+					"notice": "Emitted when Shylock cancels after no collateral was deposited."
+				},
+				"ContractCreated(address,address,uint256,uint256,uint256)": {
+					"notice": "Emitted when the contract is deployed and terms are set."
+				},
+				"LoanDisbursed(uint256,uint256)": {
+					"notice": "Emitted when Shylock disburses the loan to Antonio."
+				},
+				"LoanRepaid(uint256,uint256)": {
+					"notice": "Emitted when Antonio repays and collateral is returned."
+				}
+			},
+			"kind": "user",
+			"methods": {
+				"antonio()": {
+					"notice": "The borrower. Deposits collateral and repays the loan."
+				},
+				"cancel()": {
+					"notice": "Shylock cancels the contract if Antonio never deposited collateral         and the deposit window has closed. No ETH is held so nothing moves."
+				},
+				"claimBond()": {
+					"notice": "Shylock claims the full collateral after Antonio defaults.         Only callable after the repayment deadline has passed.         Antonio keeps the loan ETH as the cost of default."
+				},
+				"collateralAmount()": {
+					"notice": "The collateral Antonio must deposit — exactly twice the loan.         Returned to Antonio on repayment. Claimed by Shylock on default."
+				},
+				"collateralDeposited()": {
+					"notice": "True once Antonio has deposited the required collateral."
+				},
+				"constructor": {
+					"notice": "Deploy the contract and set the lending terms.         No ETH is locked at this stage."
+				},
+				"depositCollateral()": {
+					"notice": "Antonio deposits collateral equal to twice the loan amount.         Starts the disbursement clock for Shylock."
+				},
+				"depositDeadline()": {
+					"notice": "Antonio must deposit collateral before this timestamp.         Set at deployment."
+				},
+				"depositWindowSeconds()": {
+					"notice": "Seconds Antonio has to deposit collateral after deployment."
+				},
+				"disburseLoan()": {
+					"notice": "Shylock disburses the loan directly to Antonio.         Shylock attaches exactly loanAmount in wei.         Starts the repayment clock for Antonio.         The contract never holds both sums simultaneously —         the loan ETH passes through to Antonio immediately."
+				},
+				"disbursed()": {
+					"notice": "True once Shylock has disbursed the loan to Antonio."
+				},
+				"disbursementDeadline()": {
+					"notice": "Shylock must disburse the loan before this timestamp.         Set when Antonio calls depositCollateral()."
+				},
+				"disbursementWindowSeconds()": {
+					"notice": "Seconds Shylock has to disburse after Antonio deposits."
+				},
+				"getBalance()": {
+					"notice": "Current ETH balance held by the contract in wei."
+				},
+				"loanAmount()": {
+					"notice": "The loan amount Shylock will send to Antonio."
+				},
+				"reclaimCollateral()": {
+					"notice": "Antonio reclaims his collateral if Shylock failed to disburse         within the disbursement window."
+				},
+				"repay()": {
+					"notice": "Antonio repays the loan before the repayment deadline.         Repayment is forwarded to Shylock and collateral is returned         to Antonio in the same transaction.         Checks-Effects-Interactions: settled is written before any transfer."
+				},
+				"repaymentDeadline()": {
+					"notice": "Antonio must repay the loan before this timestamp.         Set when Shylock calls disburseLoan()."
+				},
+				"repaymentWindowSeconds()": {
+					"notice": "Seconds Antonio has to repay after Shylock disburses."
+				},
+				"settled()": {
+					"notice": "True once the contract has reached its final state.         No further functions may be called after this point."
+				},
+				"shylock()": {
+					"notice": "The lender. Deploys the contract and disburses the loan."
+				},
+				"timeToDepositDeadline()": {
+					"notice": "Seconds remaining in the deposit window. Returns 0 if closed."
+				},
+				"timeToDisbursementDeadline()": {
+					"notice": "Seconds remaining in the disbursement window.         Returns 0 if collateral not deposited or window has closed."
+				},
+				"timeToRepaymentDeadline()": {
+					"notice": "Seconds remaining in the repayment window.         Returns 0 if loan not disbursed or window has closed."
+				}
+			},
+			"notice": "A fully on-chain secured lending escrow.         Shylock (lender) sets the terms at deployment.         Antonio (borrower) deposits collateral equal to twice the loan amount.         Shylock then disburses the loan directly to Antonio.         Antonio repays before the repayment deadline to recover his collateral.         If Antonio defaults, Shylock claims the full collateral as compensation.         Three time windows govern the lifecycle:           1. depositWindow       — Antonio must deposit collateral within this                                    period after deployment.           2. disbursementWindow  — Shylock must disburse within this period                                    after Antonio deposits.           3. repaymentWindow     — Antonio must repay within this period                                    after Shylock disburses.         State flags enforce correct sequencing:           collateralDeposited -> disbursed -> settled         Every ETH entry path has a defined exit — no funds can be stranded.",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"MerchantOfVenice.sol": "MerchantOfVenice"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"MerchantOfVenice.sol": {
+			"keccak256": "0x79ddff3dde1fff95f88c6f7f040d0d8c1e8d1dec8a7acb9832fd3fe314904478",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://cff60332114bb5add6a3f25cff6f443e2413d00d8e7d6b9d45b83506758e7d5d",
+				"dweb:/ipfs/QmVzH8v4kUhU8yiwvVpWnaTGrqZ3UiovYrZa2GGB7dYDDv"
+			]
+		}
+	},
+	"version": 1
+}

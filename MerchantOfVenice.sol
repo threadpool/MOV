@@ -251,7 +251,7 @@ contract MerchantOfVenice {
     // Safe ETH transfer helper
     // ─────────────────────────────────────────────────────────
 
-    /// @dev Replaces .transfer() — forwards all available gas and reverts on failure.
+    /// @dev Replaces .transfer() forwards all available gas and reverts on failure.
     function _safeTransfer(address to, uint256 value) internal {
         (bool success, ) = payable(to).call{value: value}("");
         require(success, "ETH transfer failed");
@@ -372,7 +372,7 @@ contract MerchantOfVenice {
         afterDepositDeadline
         nonReentrant
     {
-        require(!collateralDeposited, "Collateral deposited — use reclaimCollateral path");
+        require(!collateralDeposited, "Collateral deposited use reclaimCollateral path");
 
         settled = true;
 
