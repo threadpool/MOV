@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Merchant of Venice Smart Contract Walkthrough · FSE Solutions</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        :root {
+            --fse-primary:#8B2332; --fse-secondary:#A52A3A; --fse-accent:#C4985F;
+            --fse-success:#28a745; --fse-danger:#dc3545; --fse-blue:#1565C0;
+            --fse-light:#f8f9fa; --fse-dark:#2c3e50; --fse-gray:#6c757d;
+            --fse-gray-light:#e9ecef; --fse-border:#dee2e6;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%);color:var(--fse-dark);line-height:1.7;min-height:100vh;}
+        header{background:linear-gradient(135deg,var(--fse-primary) 0%,var(--fse-secondary) 100%);color:white;padding:40px 20px;box-shadow:0 4px 20px rgba(0,0,0,0.15);}
+        .header-content{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px;}
+        .fse-logo{background:white;padding:10px 18px;border-radius:8px;font-weight:800;font-size:1.2rem;color:var(--fse-primary);letter-spacing:-0.5px;box-shadow:0 2px 10px rgba(0,0,0,0.12);white-space:nowrap;}
+        .fse-logo .solutions{color:var(--fse-gray);font-weight:600;}
+        .header-text h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;letter-spacing:-0.5px;line-height:1.2;}
+        .header-text .subtitle{margin-top:8px;font-size:1rem;opacity:0.85;font-weight:400;}
+        .header-badge{display:inline-block;margin-top:14px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 14px;font-size:0.8rem;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;}
+        .container{max-width:960px;margin:0 auto;padding:40px 20px;}
+        .intro-card{background:white;border-radius:12px;padding:36px 40px;margin-bottom:30px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:6px solid var(--fse-accent);}
+        .intro-card h2{font-size:1.4rem;font-weight:700;color:var(--fse-primary);margin-bottom:14px;}
+        .intro-card p{margin-bottom:12px;font-size:1.02rem;}
+        .section{background:white;border-radius:12px;padding:36px 40px;margin-bottom:28px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border-left:5px solid var(--fse-accent);transition:box-shadow 0.3s,transform 0.3s;}
+        .section:hover{box-shadow:0 6px 24px rgba(0,0,0,0.09);transform:translateY(-2px);}
+        .section-heading{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+        .section-number{background:linear-gradient(135deg,var(--fse-primary),var(--fse-secondary));color:white;min-width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;}
+        .section-heading h2{font-size:1.5rem;font-weight:700;color:var(--fse-primary);margin:0;}
+        p{margin-bottom:14px;font-size:1.02rem;color:var(--fse-dark);}
+        pre{background:#1e1e2e;border-radius:10px;padding:24px 28px;margin:20px 0;overflow-x:auto;border:1px solid #2e2e44;position:relative;}
+        pre code{font-family:'JetBrains Mono',monospace;font-size:0.88rem;line-height:1.75;color:#cdd6f4;}
+        .kw{color:#cba6f7;}.ty{color:#89b4fa;}.fn{color:#89dceb;}.cm{color:#6c7086;font-style:italic;}.st{color:#a6e3a1;}.nm{color:#fab387;}.ev{color:#f9e2af;}.md{color:#f38ba8;}
+        .code-label{position:absolute;top:10px;right:16px;font-family:'Inter',sans-serif;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6c7086;}
+        .info-box{background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-left:4px solid var(--fse-secondary);padding:18px 22px;border-radius:8px;margin:20px 0;font-size:1rem;}
+        .info-box strong{color:var(--fse-primary);}
+        .warning-box{background:linear-gradient(135deg,#fff8e1,#ffecb3);border-left:4px solid var(--fse-accent);padding:18px 22px;border-radius:8px;margin:20px 0;font-size:1rem;}
+        .warning-box strong{color:#7b5a00;}
+        .success-box{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-left:4px solid var(--fse-success);padding:18px 22px;border-radius:8px;margin:20px 0;font-size:1rem;}
+        .success-box strong{color:#1b5e20;}
+        .alert-box{background:linear-gradient(135deg,#ffebee,#ffcdd2);border-left:4px solid var(--fse-danger);padding:18px 22px;border-radius:8px;margin:20px 0;font-size:1rem;}
+        .alert-box strong{color:#7f0000;}
+        .concept-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:22px 0;}
+        .concept-card{background:var(--fse-light);border:2px solid var(--fse-border);border-radius:10px;padding:18px 20px;transition:border-color 0.2s;}
+        .concept-card:hover{border-color:var(--fse-accent);}
+        .concept-card .icon{font-size:1.6rem;margin-bottom:8px;}
+        .concept-card h4{font-size:0.95rem;font-weight:700;color:var(--fse-primary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px;}
+        .concept-card p{font-size:0.9rem;color:var(--fse-gray);margin:0;}
+        .mod-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:0.95rem;}
+        .mod-table th{background:linear-gradient(135deg,var(--fse-primary),var(--fse-secondary));color:white;padding:12px 16px;text-align:left;font-weight:700;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.5px;}
+        .mod-table th:first-child{border-radius:8px 0 0 0;}.mod-table th:last-child{border-radius:0 8px 0 0;}
+        .mod-table td{padding:12px 16px;border-bottom:1px solid var(--fse-border);vertical-align:top;}
+        .mod-table tr:last-child td{border-bottom:none;}
+        .mod-table tr:nth-child(even) td{background:#fafafa;}
+        .mod-table code,p code,li code{font-family:'JetBrains Mono',monospace;font-size:0.88rem;background:#f0f0f0;padding:2px 7px;border-radius:4px;color:var(--fse-primary);font-weight:600;}
+        .fn-card{border:2px solid var(--fse-border);border-radius:10px;overflow:hidden;margin:24px 0;}
+        .fn-card-header{background:linear-gradient(135deg,var(--fse-primary),var(--fse-secondary));color:white;padding:14px 20px;}
+        .fn-card-header.antonio{background:linear-gradient(135deg,#1565C0,#0D47A1);}
+        .fn-card-header.danger{background:linear-gradient(135deg,#7f0000,#b71c1c);}
+        .fn-card-header .fn-name{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;}
+        .fn-card-header .fn-desc{font-size:0.88rem;opacity:0.8;margin-top:2px;}
+        .fn-card-body{padding:20px 24px;background:white;}
+        .fn-card-body p{margin-bottom:10px;}
+        .fn-card-body p:last-child{margin-bottom:0;}
+        .modifier-pills{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
+        .pill{padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:700;font-family:'JetBrains Mono',monospace;}
+        .pill-red{background:#ffebee;color:#c62828;border:1px solid #ef9a9a;}
+        .pill-blue{background:#e3f2fd;color:#1565c0;border:1px solid #90caf9;}
+        .pill-green{background:#e8f5e9;color:#1b5e20;border:1px solid #a5d6a7;}
+        .pill-orange{background:#fff3e0;color:#7b5a00;border:1px solid #ffcc80;}
+        .pill-purple{background:#f3e5f5;color:#6a1b9a;border:1px solid #ce93d8;}
+        .pill-darkred{background:#fce4ec;color:#880e4f;border:1px solid #f48fb1;}
+        .timeline{background:#f8f9fa;border-radius:12px;padding:24px;margin:20px 0;}
+        .timeline-row{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;}
+        .timeline-row:last-child{margin-bottom:0;}
+        .timeline-badge{background:linear-gradient(135deg,var(--fse-primary),var(--fse-secondary));color:white;min-width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:800;flex-shrink:0;margin-top:2px;}
+        .timeline-badge.antonio{background:linear-gradient(135deg,#1565C0,#0D47A1);}
+        .timeline-content h4{font-size:1rem;font-weight:700;color:var(--fse-primary);margin-bottom:4px;}
+        .timeline-content p{font-size:0.92rem;color:var(--fse-gray);margin:0;}
+        .toc{background:white;border-radius:12px;padding:28px 32px;margin-bottom:30px;box-shadow:0 2px 10px rgba(0,0,0,0.05);border-left:5px solid var(--fse-primary);}
+        .toc h3{font-size:1rem;font-weight:700;color:var(--fse-primary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;}
+        .toc ol{padding-left:20px;}
+        .toc li{margin-bottom:6px;}
+        .toc a{color:var(--fse-dark);text-decoration:none;font-size:0.97rem;transition:color 0.2s;}
+        .toc a:hover{color:var(--fse-primary);font-weight:600;}
+        footer{background:linear-gradient(135deg,var(--fse-primary),var(--fse-secondary));color:white;text-align:center;padding:28px 20px;font-size:0.9rem;margin-top:20px;}
+        footer .footer-logo{display:inline-block;background:rgba(255,255,255,0.15);border-radius:6px;padding:4px 12px;font-weight:800;font-size:1rem;margin-bottom:8px;letter-spacing:-0.3px;}
+        footer p{opacity:0.75;margin:0;}
+        @media(max-width:640px){.section,.intro-card{padding:24px 20px;}pre{padding:18px 16px;}}
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <div class="fse-logo">FSE <span class="solutions">Solutions</span></div>
+        <div class="header-text">
+            <h1>The Merchant of Venice</h1>
+            <div class="subtitle">A plain-English walkthrough of a Solidity smart contract</div>
+            <span class="header-badge">Pictet Geneva Crypto Club · April 21 2026</span>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="intro-card">
+        <h2>What is this contract?</h2>
+        <p>This document walks through <strong>MerchantOfVenice</strong> a fully on-chain secured lending escrow line by line. No programming experience is assumed. Every concept is explained in plain English before the code is shown.</p>
+        <p>The contract models the Shakespeare story as a complete, trustless lending agreement. Antonio deposits collateral worth twice the loan before receiving anything. Shylock then disburses the loan on-chain. If Antonio repays, he recovers his full collateral. If he defaults, Shylock claims it. Every step is enforced by code no bank, no lawyer, no trust required at any stage.</p>
+        <div class="concept-grid">
+            <div class="concept-card"><div class="icon">🏦</div><h4>Deploy</h4><p>Shylock sets the terms. No ETH locked yet. Three time windows established.</p></div>
+            <div class="concept-card"><div class="icon">🔐</div><h4>Collateral</h4><p>Antonio deposits 2× the loan. Locked in the contract before a penny is lent.</p></div>
+            <div class="concept-card"><div class="icon">💸</div><h4>Lend</h4><p>Shylock disburses the loan on-chain to Antonio. Repayment clock starts.</p></div>
+            <div class="concept-card"><div class="icon">⚖️</div><h4>Enforce</h4><p>Repay and recover collateral or default and forfeit it. Code decides.</p></div>
+        </div>
+    </div>
+
+    <div class="toc">
+        <h3>Contents</h3>
+        <ol>
+            <li><a href="#s1">Licence and version</a></li>
+            <li><a href="#s2">The contract declaration</a></li>
+            <li><a href="#s3">Parties and financial terms</a></li>
+            <li><a href="#s4">The three deadlines</a></li>
+            <li><a href="#s5">State flags</a></li>
+            <li><a href="#s6">Events the audit log</a></li>
+            <li><a href="#s7">The reentrancy guard</a></li>
+            <li><a href="#s8">Modifiers access, state and time</a></li>
+            <li><a href="#s9">The constructor</a></li>
+            <li><a href="#s10">The safe transfer helper</a></li>
+            <li><a href="#s11">The six action functions</a></li>
+            <li><a href="#s12">View functions</a></li>
+            <li><a href="#s13">The complete lifecycle</a></li>
+        </ol>
+    </div>
+
+    <div class="section" id="s1">
+        <div class="section-heading"><div class="section-number">1</div><h2>Licence and version</h2></div>
+        <pre><code><span class="cm">// SPDX-License-Identifier: MIT</span>
+<span class="kw">pragma</span> solidity ^0.8.20;</code><span class="code-label">Solidity</span></pre>
+        <p>MIT licence means anyone can use or copy this code freely. The pragma declares the required Solidity compiler version <code>^0.8.20</code> means this version or any compatible minor update. Without this the compiler does not know how to read the file.</p>
+    </div>
+
+    <div class="section" id="s2">
+        <div class="section-heading"><div class="section-number">2</div><h2>The contract declaration</h2></div>
+        <pre><code><span class="kw">contract</span> <span class="ty">MerchantOfVenice</span> {
+    <span class="cm">// everything inside here is the contract</span>
+}</code><span class="code-label">Solidity</span></pre>
+        <p>Once deployed to Ethereum this contract lives at a permanent address forever. Its code is immutable nobody can alter it after deployment, not even the person who wrote it. Every rule inside it is enforced automatically.</p>
+    </div>
+
+    <div class="section" id="s3">
+        <div class="section-heading"><div class="section-number">3</div><h2>Parties and financial terms</h2></div>
+        <pre><code><span class="ty">address</span> <span class="kw">public</span> shylock;          <span class="cm">// The lender deploys the contract</span>
+<span class="ty">address</span> <span class="kw">public</span> antonio;          <span class="cm">// The borrower</span>
+
+<span class="ty">uint256</span> <span class="kw">public</span> loanAmount;       <span class="cm">// The loan, in wei</span>
+<span class="ty">uint256</span> <span class="kw">public</span> collateralAmount; <span class="cm">// Always loanAmount * 2, computed automatically</span></code><span class="code-label">Solidity</span></pre>
+        <p><code>address</code> is an Ethereum wallet a unique 42-character identifier beginning with <code>0x</code>. <code>uint256</code> is a non-negative whole number. All ETH values are stored in <strong>wei</strong> the smallest unit of Ethereum (1 ETH = 10¹⁸ wei) to eliminate any possibility of rounding errors in arithmetic.</p>
+        <div class="info-box">
+            <strong>💡 Why 200% collateral?</strong> Antonio must deposit twice what he borrows. If he repays, he recovers all of it net position zero. If he defaults, Shylock recovers the loan amount plus the same again as a penalty. The asymmetry is the deterrent. This is the pound of flesh, expressed in ETH.
+        </div>
+        <p><code>collateralAmount</code> is never entered by anyone it is computed automatically as <code>loanAmount * 2</code> in the constructor. No human can set it to a different value.</p>
+    </div>
+
+    <div class="section" id="s4">
+        <div class="section-heading"><div class="section-number">4</div><h2>The three deadlines</h2></div>
+        <pre><code><span class="ty">uint256</span> <span class="kw">public</span> depositDeadline;      <span class="cm">// Set at deployment</span>
+<span class="ty">uint256</span> <span class="kw">public</span> disbursementDeadline; <span class="cm">// Set when Antonio deposits</span>
+<span class="ty">uint256</span> <span class="kw">public</span> repaymentDeadline;    <span class="cm">// Set when Shylock disburses</span></code><span class="code-label">Solidity</span></pre>
+        <p>These are Unix timestamps seconds since 1 January 1970 enforced by the Ethereum blockchain clock, not a server or calendar. The critical design principle is that <strong>each deadline is set progressively</strong>, triggered only by the previous action:</p>
+        <div class="concept-grid">
+            <div class="concept-card"><div class="icon">📅</div><h4>depositDeadline</h4><p>Set at deployment. Antonio must deposit collateral before this or the contract can be cancelled.</p></div>
+            <div class="concept-card"><div class="icon">📅</div><h4>disbursementDeadline</h4><p>Set when Antonio deposits. Shylock must disburse within this window or Antonio can reclaim.</p></div>
+            <div class="concept-card"><div class="icon">📅</div><h4>repaymentDeadline</h4><p>Set when Shylock disburses. Antonio's clock only starts when he actually has the money.</p></div>
+        </div>
+        <div class="success-box">
+            <strong>✓ Why progressive deadlines matter:</strong> If the repayment deadline were set at deployment, it would start counting before Antonio had received a penny deeply unfair. By setting it at the moment of disbursement, Antonio's window only opens when the loan arrives in his wallet. Both parties get their fair and enforced time.
+        </div>
+    </div>
+
+    <div class="section" id="s5">
+        <div class="section-heading"><div class="section-number">5</div><h2>State flags</h2></div>
+        <pre><code><span class="ty">bool</span> <span class="kw">public</span> collateralDeposited; <span class="cm">// true once Antonio deposits</span>
+<span class="ty">bool</span> <span class="kw">public</span> disbursed;           <span class="cm">// true once Shylock disburses</span>
+<span class="ty">bool</span> <span class="kw">public</span> settled;             <span class="cm">// true once contract is finally resolved</span></code><span class="code-label">Solidity</span></pre>
+        <p>Three boolean flags track where the contract is in its lifecycle. They can only move in one direction from <code>false</code> to <code>true</code> and together they enforce the correct sequence of events.</p>
+        <table class="mod-table">
+            <thead><tr><th>Flag</th><th>Set by</th><th>What it unlocks</th><th>What it blocks</th></tr></thead>
+            <tbody>
+                <tr><td><code>collateralDeposited</code></td><td>depositCollateral()</td><td>disburseLoan() becomes callable</td><td>A second deposit</td></tr>
+                <tr><td><code>disbursed</code></td><td>disburseLoan()</td><td>repay() and claimBond() become callable</td><td>reclaimCollateral()</td></tr>
+                <tr><td><code>settled</code></td><td>Any terminal function</td><td>Nothing contract is permanently closed</td><td>Every function via notSettled</td></tr>
+            </tbody>
+        </table>
+        <div class="info-box">
+            <strong>💡 The sequencing guarantee:</strong> Because <code>claimBond()</code> requires <code>disbursed == true</code>, Shylock cannot claim a default on a loan he never made. Because <code>repay()</code> requires <code>disbursed == true</code>, Antonio cannot repay a loan he never received. The flags enforce correct ordering no shortcuts, no skipping steps.
+        </div>
+    </div>
+
+    <div class="section" id="s6">
+        <div class="section-heading"><div class="section-number">6</div><h2>Events the audit log</h2></div>
+        <pre><code><span class="kw">event</span> <span class="ev">ContractCreated</span>(address indexed shylock, address indexed antonio, ...);
+<span class="kw">event</span> <span class="ev">CollateralDeposited</span>(uint256 amount, uint256 disbursementDeadline);
+<span class="kw">event</span> <span class="ev">LoanDisbursed</span>(uint256 amount, uint256 repaymentDeadline);
+<span class="kw">event</span> <span class="ev">LoanRepaid</span>(uint256 repaymentAmount, uint256 collateralReturned);
+<span class="kw">event</span> <span class="ev">CollateralReclaimed</span>(uint256 amount);
+<span class="kw">event</span> <span class="ev">BondForfeited</span>(uint256 amount);
+<span class="kw">event</span> <span class="ev">ContractCancelled</span>();</code><span class="code-label">Solidity</span></pre>
+        <p>Every significant action fires an event a permanent, tamper-proof log entry written to the blockchain. Events cannot be deleted or altered. Seven events cover every possible outcome, forming a complete public audit trail visible to anyone on Sepolia Etherscan. The <code>indexed</code> keyword on addresses makes them searchable you can look up all contracts involving a specific wallet.</p>
+    </div>
+
+    <div class="section" id="s7">
+        <div class="section-heading"><div class="section-number">7</div><h2>The reentrancy guard</h2></div>
+        <pre><code><span class="ty">bool</span> <span class="kw">private</span> _locked;
+
+<span class="kw">modifier</span> <span class="fn">nonReentrant</span>() {
+    <span class="fn">require</span>(!_locked, <span class="st">"Reentrant call"</span>);
+    _locked = <span class="kw">true</span>;
+    _;
+    _locked = <span class="kw">false</span>;
+}</code><span class="code-label">Solidity</span></pre>
+        <p>Works like a door bolt. Before any ETH-moving function runs it checks the bolt is open, locks it, executes the function, then unlocks it. If a malicious contract attempts to call back in before the function finishes the bolt is already locked and the attempt is immediately rejected.</p>
+        <div class="alert-box"><strong>⚠️ The 2016 DAO hack:</strong> A contract without this guard was drained of $60 million. An attacker called the withdrawal function repeatedly before the contract had recorded that the first withdrawal occurred. This guard prevents exactly that attack. Applied to every function that moves ETH in this contract.</div>
+    </div>
+
+    <div class="section" id="s8">
+        <div class="section-heading"><div class="section-number">8</div><h2>Modifiers access, state and time</h2></div>
+        <pre><code><span class="cm">// Access control</span>
+<span class="kw">modifier</span> <span class="md">onlyShylock</span>()              { <span class="fn">require</span>(msg.sender == shylock, ...); _; }
+<span class="kw">modifier</span> <span class="md">onlyAntonio</span>()              { <span class="fn">require</span>(msg.sender == antonio, ...); _; }
+<span class="cm">// State control</span>
+<span class="kw">modifier</span> <span class="md">notSettled</span>()               { <span class="fn">require</span>(!settled, ...); _; }
+<span class="kw">modifier</span> <span class="md">hasCollateral</span>()            { <span class="fn">require</span>(collateralDeposited, ...); _; }
+<span class="kw">modifier</span> <span class="md">notDisbursed</span>()             { <span class="fn">require</span>(!disbursed, ...); _; }
+<span class="kw">modifier</span> <span class="md">isDisbursed</span>()              { <span class="fn">require</span>(disbursed, ...); _; }
+<span class="cm">// Time control</span>
+<span class="kw">modifier</span> <span class="md">beforeDepositDeadline</span>()    { ... }
+<span class="kw">modifier</span> <span class="md">afterDepositDeadline</span>()     { ... }
+<span class="kw">modifier</span> <span class="md">beforeDisbursementDeadline</span>(){ ... }
+<span class="kw">modifier</span> <span class="md">afterDisbursementDeadline</span>() { ... }
+<span class="kw">modifier</span> <span class="md">beforeRepaymentDeadline</span>()  { ... }
+<span class="kw">modifier</span> <span class="md">afterRepaymentDeadline</span>()   { ... }</code><span class="code-label">Solidity</span></pre>
+        <p>Modifiers are reusable rules bolted onto functions. Each one runs at the moment the function is called not at deployment. If any check fails the entire transaction reverts instantly and no state changes. Twelve modifiers in three categories give the contract precise, layered control over who can do what and when.</p>
+    </div>
+
+    <div class="section" id="s9">
+        <div class="section-heading"><div class="section-number">9</div><h2>The constructor</h2></div>
+        <pre><code><span class="kw">constructor</span>(
+    <span class="ty">address</span> _antonio,
+    <span class="ty">uint256</span> _loanAmount,
+    <span class="ty">uint256</span> _depositWindowSeconds,
+    <span class="ty">uint256</span> _disbursementWindowSeconds,
+    <span class="ty">uint256</span> _repaymentWindowSeconds
+) {
+    shylock          = msg.sender;
+    antonio          = _antonio;
+    loanAmount       = _loanAmount;
+    collateralAmount = _loanAmount * <span class="nm">2</span>;  <span class="cm">// 200% hardcoded</span>
+    depositDeadline  = block.timestamp + _depositWindowSeconds;
+    <span class="cm">// disbursementDeadline and repaymentDeadline set progressively later</span>
+    <span class="kw">emit</span> <span class="ev">ContractCreated</span>(...);
+}</code><span class="code-label">Solidity</span></pre>
+        <p>Runs exactly once at deployment, never again. Takes five parameters and establishes the entire agreement. <code>msg.sender</code> is whoever deployed Shylock. <code>block.timestamp</code> is the blockchain clock in Unix seconds. No ETH is locked at this stage deployment is lightweight. Only the deposit window starts counting immediately.</p>
+        <div class="success-box"><strong>✓ Notice:</strong> <code>collateralAmount = loanAmount * 2</code> is computed and written to the blockchain permanently at this moment. Antonio cannot deposit less. Nobody can change it. The 200% requirement is mathematically locked into the agreement from the instant it is created.</div>
+    </div>
+
+    <div class="section" id="s10">
+        <div class="section-heading"><div class="section-number">10</div><h2>The safe transfer helper</h2></div>
+        <pre><code><span class="kw">function</span> <span class="fn">_safeTransfer</span>(<span class="ty">address</span> to, <span class="ty">uint256</span> value) <span class="kw">internal</span> {
+    (<span class="ty">bool</span> success, ) = <span class="fn">payable</span>(to).<span class="fn">call</span>{value: value}(<span class="st">""</span>);
+    <span class="fn">require</span>(success, <span class="st">"ETH transfer failed"</span>);
+}</code><span class="code-label">Solidity</span></pre>
+        <p><code>internal</code> means only this contract can call it it is a private helper invisible to the outside world. Used by every function that sends ETH. The <code>.call{value:v}("")</code> pattern forwards all available gas rather than the fixed 2,300-unit limit of the old <code>.transfer()</code> method, which could fail if the recipient is a smart contract with any logic. The <code>require(success)</code> ensures no transfer can fail silently.</p>
+    </div>
+
+    <div class="section" id="s11">
+        <div class="section-heading"><div class="section-number">11</div><h2>The six action functions</h2></div>
+        <p>These are the only ways the contract's state or ETH balances can change after deployment. Each is guarded by a precise combination of modifiers.</p>
+
+        <div class="fn-card">
+            <div class="fn-card-header antonio">
+                <div class="fn-name">depositCollateral()</div>
+                <div class="fn-desc">Antonio locks twice the loan amount starts the disbursement clock for Shylock</div>
+            </div>
+            <div class="fn-card-body">
+                <div class="modifier-pills">
+                    <span class="pill pill-blue">onlyAntonio</span>
+                    <span class="pill pill-red">notSettled</span>
+                    <span class="pill pill-red">notDisbursed</span>
+                    <span class="pill pill-orange">beforeDepositDeadline</span>
+                    <span class="pill pill-green">nonReentrant</span>
+                </div>
+                <pre><code><span class="kw">function</span> <span class="fn">depositCollateral</span>() <span class="kw">external payable</span> ... {
+    <span class="fn">require</span>(msg.value == collateralAmount,
+            <span class="st">"Must deposit exactly twice the loan amount"</span>);
+    collateralDeposited  = <span class="kw">true</span>;
+    disbursementDeadline = block.timestamp + disbursementWindowSeconds;
+    <span class="kw">emit</span> <span class="ev">CollateralDeposited</span>(msg.value, disbursementDeadline);
+}</code><span class="code-label">Solidity</span></pre>
+                <p><strong>Scenario:</strong> Antonio agrees to the terms and locks his collateral. The exact amount is enforced not one wei more or less. The moment this succeeds, the contract holds <code>collateralAmount</code> ETH and Shylock's disbursement clock starts. The collateral will not move again until repayment or default.</p>
+            </div>
+        </div>
+
+        <div class="fn-card">
+            <div class="fn-card-header">
+                <div class="fn-name">disburseLoan()</div>
+                <div class="fn-desc">Shylock sends the loan directly to Antonio starts the repayment clock</div>
+            </div>
+            <div class="fn-card-body">
+                <div class="modifier-pills">
+                    <span class="pill pill-red">onlyShylock</span>
+                    <span class="pill pill-red">notSettled</span>
+                    <span class="pill pill-purple">hasCollateral</span>
+                    <span class="pill pill-red">notDisbursed</span>
+                    <span class="pill pill-orange">beforeDisbursementDeadline</span>
+                    <span class="pill pill-green">nonReentrant</span>
+                </div>
+                <pre><code><span class="kw">function</span> <span class="fn">disburseLoan</span>() <span class="kw">external payable</span> ... {
+    <span class="fn">require</span>(msg.value == loanAmount,
+            <span class="st">"Must disburse exactly the loan amount"</span>);
+    disbursed         = <span class="kw">true</span>;
+    repaymentDeadline = block.timestamp + repaymentWindowSeconds;
+    <span class="fn">_safeTransfer</span>(antonio, loanAmount);
+    <span class="kw">emit</span> <span class="ev">LoanDisbursed</span>(loanAmount, repaymentDeadline);
+}</code><span class="code-label">Solidity</span></pre>
+                <p><strong>Scenario:</strong> Shylock is satisfied that collateral is locked and makes the loan. He attaches exactly <code>loanAmount</code> ETH to this call. That ETH passes directly through to Antonio the contract never holds both the collateral and the loan simultaneously. Antonio's repayment clock starts the instant this transaction confirms.</p>
+                <p>The <code>hasCollateral</code> modifier ensures Shylock can never call this if Antonio has not deposited no loan can be made without the collateral already locked.</p>
+            </div>
+        </div>
+
+        <div class="fn-card">
+            <div class="fn-card-header antonio">
+                <div class="fn-name">repay()</div>
+                <div class="fn-desc">Antonio repays on-chain collateral returned and loan forwarded atomically</div>
+            </div>
+            <div class="fn-card-body">
+                <div class="modifier-pills">
+                    <span class="pill pill-blue">onlyAntonio</span>
+                    <span class="pill pill-red">notSettled</span>
+                    <span class="pill pill-purple">isDisbursed</span>
+                    <span class="pill pill-orange">beforeRepaymentDeadline</span>
+                    <span class="pill pill-green">nonReentrant</span>
+                </div>
+                <pre><code><span class="kw">function</span> <span class="fn">repay</span>() <span class="kw">external payable</span> ... {
+    <span class="fn">require</span>(msg.value == loanAmount,
+            <span class="st">"Must repay exactly the loan amount"</span>);
+    settled = <span class="kw">true</span>;                            <span class="cm">// Effect first (CEI pattern)</span>
+    <span class="fn">_safeTransfer</span>(antonio, collateralAmount);  <span class="cm">// Return collateral</span>
+    <span class="fn">_safeTransfer</span>(shylock, loanAmount);        <span class="cm">// Forward repayment</span>
+    <span class="kw">emit</span> <span class="ev">LoanRepaid</span>(loanAmount, collateralAmount);
+}</code><span class="code-label">Solidity</span></pre>
+                <p><strong>Scenario:</strong> Antonio repays before the deadline. He attaches exactly <code>loanAmount</code> ETH. The contract verifies the amount, returns his 2× collateral, and forwards the repayment to Shylock all in one atomic transaction. Either everything succeeds or nothing changes.</p>
+                <p><code>settled = true</code> is written <em>before</em> any ETH moves. This is the Checks-Effects-Interactions pattern state is finalised before external calls are made, preventing any reentrancy exploit.</p>
+                <div class="success-box"><strong>✓ Both parties made whole in one transaction:</strong> Antonio recovers 2× loan as collateral, Shylock recovers 1× loan as repayment. Net result both at zero, agreement honoured.</div>
+            </div>
+        </div>
+
+        <div class="fn-card">
+            <div class="fn-card-header antonio">
+                <div class="fn-name">reclaimCollateral()</div>
+                <div class="fn-desc">Antonio's exit if Shylock failed to disburse within the disbursement window</div>
+            </div>
+            <div class="fn-card-body">
+                <div class="modifier-pills">
+                    <span class="pill pill-blue">onlyAntonio</span>
+                    <span class="pill pill-red">notSettled</span>
+                    <span class="pill pill-purple">hasCollateral</span>
+                    <span class="pill pill-red">notDisbursed</span>
+                    <span class="pill pill-darkred">afterDisbursementDeadline</span>
+                    <span class="pill pill-green">nonReentrant</span>
+                </div>
+                <pre><code><span class="kw">function</span> <span class="fn">reclaimCollateral</span>() <span class="kw">external</span> ... {
+    settled = <span class="kw">true</span>;
+    <span class="fn">_safeTransfer</span>(antonio, collateralAmount);
+    <span class="kw">emit</span> <span class="ev">CollateralReclaimed</span>(collateralAmount);
+}</code><span class="code-label">Solidity</span></pre>
+                <p><strong>Scenario:</strong> Antonio deposited collateral in good faith but Shylock failed to disburse within his window. This function guarantees Antonio is never trapped his collateral has a defined exit regardless of Shylock's behaviour.</p>
+            </div>
+        </div>
+
+        <div class="fn-card">
+            <div class="fn-card-header danger">
+                <div class="fn-name">claimBond()</div>
+                <div class="fn-desc">Antonio defaulted Shylock claims the full collateral as compensation</div>
+            </div>
+            <div class="fn-card-body">
+                <div class="modifier-pills">
+                    <span class="pill pill-red">onlyShylock</span>
+                    <span class="pill pill-red">notSettled</span>
+                    <span class="pill pill-purple">isDisbursed</span>
+                    <span class="pill pill-darkred">afterRepaymentDeadline</span>
+                    <span class="pill pill-green">nonReentrant</span>
+                </div>
+                <pre><code><span class="kw">function</span> <span class="fn">claimBond</span>() <span class="kw">external</span> ... {
+    settled = <span class="kw">true</span>;
+    <span class="fn">_safeTransfer</span>(shylock, collateralAmount);
+    <span class="kw">emit</span> <span class="ev">BondForfeited</span>(collateralAmount);
+}</code><span class="code-label">Solidity</span></pre>
+                <p><strong>Scenario:</strong> Shylock disbursed the loan. The repayment deadline passed. Antonio never called <code>repay()</code>. Shylock claims the full collateral twice the loan amount as compensation. Antonio keeps the loan ETH as the cost of default.</p>
+                <p>The <code>isDisbursed</code> modifier is the logical guarantee: this can only fire if the loan was actually made. Shylock cannot claim a default on a loan he never disbursed. The collateral has been sitting in the contract since Antonio deposited it it is always there when this function fires.</p>
+                <div class="success-box"><strong>✓ This is the wow moment.</strong> Antonio had the money. He had the function. He had the time. He chose not to repay. The contract enforced the penalty automatically. No court. No argument. The code ran.</div>
+            </div>
+        </div>
+
+        <div class="fn-card">
+            <div class="fn-card-header">
+                <div class="fn-name">cancel()</div>
+                <div class="fn-desc">Shylock closes the contract if Antonio never deposited collateral</div>
+            </div>
+            <div class="fn-card-body">
+                <div class="modifier-pills">
+                    <span class="pill pill-red">onlyShylock</span>
+                    <span class="pill pill-red">notSettled</span>
+                    <span class="pill pill-darkred">afterDepositDeadline</span>
+                    <span class="pill pill-green">nonReentrant</span>
+                </div>
+                <pre><code><span class="kw">function</span> <span class="fn">cancel</span>() <span class="kw">external</span> ... {
+    <span class="fn">require</span>(!collateralDeposited, <span class="st">"Collateral deposited"</span>);
+    settled = <span class="kw">true</span>;
+    <span class="kw">emit</span> <span class="ev">ContractCancelled</span>();
+}</code><span class="code-label">Solidity</span></pre>
+                <p><strong>Scenario:</strong> Shylock deployed the contract but Antonio never deposited collateral and the deposit window closed. No ETH was ever locked so nothing moves. Shylock simply marks the contract settled to close it cleanly and emit a record of the cancellation.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="s12">
+        <div class="section-heading"><div class="section-number">12</div><h2>View functions</h2></div>
+        <pre><code><span class="kw">function</span> <span class="fn">timeToDepositDeadline</span>()      <span class="kw">external view returns</span> (<span class="ty">uint256</span>) { ... }
+<span class="kw">function</span> <span class="fn">timeToDisbursementDeadline</span>() <span class="kw">external view returns</span> (<span class="ty">uint256</span>) { ... }
+<span class="kw">function</span> <span class="fn">timeToRepaymentDeadline</span>()    <span class="kw">external view returns</span> (<span class="ty">uint256</span>) { ... }
+<span class="kw">function</span> <span class="fn">getBalance</span>()                 <span class="kw">external view returns</span> (<span class="ty">uint256</span>) { ... }</code><span class="code-label">Solidity</span></pre>
+        <p><code>view</code> functions read state but never change it they cost no gas. All three countdown functions return <code>0</code> rather than producing an arithmetic error if the deadline has passed. Each also returns <code>0</code> if the preceding action has not yet occurred for example <code>timeToRepaymentDeadline()</code> returns <code>0</code> until the loan is disbursed.</p>
+        <p><code>getBalance()</code> shows the contract's current ETH balance in wei. During the demo this confirms collateral is locked after deposit, shows it present throughout the repayment window, and confirms it transferred after <code>claimBond()</code>.</p>
+    </div>
+
+    <div class="section" id="s13">
+        <div class="section-heading"><div class="section-number">13</div><h2>The complete lifecycle</h2></div>
+        <p>Every possible path through the contract from deployment to resolution:</p>
+        <div class="timeline">
+            <div class="timeline-row">
+                <div class="timeline-badge">S</div>
+                <div class="timeline-content">
+                    <h4>Deploy constructor()</h4>
+                    <p>Shylock sets all terms. depositDeadline starts. No ETH held. All flags false.</p>
+                </div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-badge antonio">A</div>
+                <div class="timeline-content">
+                    <h4>Deposit collateral depositCollateral()</h4>
+                    <p>2× loanAmount locked in contract. disbursementDeadline set. collateralDeposited = true.</p>
+                </div>
+            </div>
+            <div class="timeline-row">
+                <div class="timeline-badge">S</div>
+                <div class="timeline-content">
+                    <h4>Disburse loan disburseLoan()</h4>
+                    <p>loanAmount sent directly to Antonio. repaymentDeadline set. Contract holds collateralAmount only. disbursed = true.</p>
+                </div>
+            </div>
+        </div>
+        <p>From disbursement, four outcomes are possible exactly one will execute:</p>
+        <table class="mod-table">
+            <thead><tr><th>Outcome</th><th>Function</th><th>Caller</th><th>ETH movement</th></tr></thead>
+            <tbody>
+                <tr><td>✅ Repaid on time</td><td><code>repay()</code></td><td>Antonio</td><td>loanAmount in → collateralAmount to Antonio + loanAmount to Shylock</td></tr>
+                <tr><td>❌ Antonio defaults</td><td><code>claimBond()</code></td><td>Shylock</td><td>collateralAmount to Shylock</td></tr>
+                <tr><td>⏱ Shylock never disburses</td><td><code>reclaimCollateral()</code></td><td>Antonio</td><td>collateralAmount to Antonio</td></tr>
+                <tr><td>🚫 Antonio never deposits</td><td><code>cancel()</code></td><td>Shylock</td><td>None contract was empty</td></tr>
+            </tbody>
+        </table>
+        <div class="info-box"><strong>💡 No ETH can be stranded:</strong> In every path, every wei that enters the contract has a defined exit. The four terminal functions cover every possible scenario. Neither party can be left with funds locked and no recourse.</div>
+    </div>
+
+    <div class="intro-card" style="border-left-color:var(--fse-primary);margin-top:10px;">
+        <h2>The complete picture</h2>
+        <p>This is a logically airtight, fully on-chain secured lending agreement. No trust is required between the parties at any stage. Every action is enforced by code, every deadline by the blockchain clock, and every ETH movement is permanent and publicly auditable.</p>
+        <div class="concept-grid">
+            <div class="concept-card"><div class="icon">🔐</div><h4>Collateral first</h4><p>Antonio commits before Shylock lends. 200% real skin in the game.</p></div>
+            <div class="concept-card"><div class="icon">⏱️</div><h4>Three windows</h4><p>Deposit, disbursement, repayment. Each party gets a fair and enforced window.</p></div>
+            <div class="concept-card"><div class="icon">🛡️</div><h4>12 modifiers</h4><p>Access, state and time all enforced. No shortcuts, no skipping steps.</p></div>
+            <div class="concept-card"><div class="icon">💸</div><h4>No stranded ETH</h4><p>Every entry has a defined exit. Four terminal functions, four scenarios covered.</p></div>
+        </div>
+        <p style="margin-top:6px;">The code is the agreement. The blockchain is the court. Neither party can cheat.</p>
+    </div>
+
+</div>
+
+<footer>
+    <div class="footer-logo">FSE Solutions</div>
+    <p>Grand-rue 24 · 1204 Geneva · Switzerland</p>
+    <p style="margin-top:6px;font-size:0.8rem;opacity:0.5;">MerchantOfVenice.sol · Sepolia Testnet · Geneva Crypto Club · May 2025</p>
+</footer>
+
+</body>
+</html>
