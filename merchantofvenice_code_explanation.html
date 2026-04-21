@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MerchantOfVenice Contract Explained | FSE Solutions</title>
+    <style>
+        :root {
+            --fse-burgundy: #8B2332;
+            --fse-gold: #C4985F;
+            --fse-dark-burgundy: #6B1A26;
+            --fse-light-gold: #D4A86F;
+            --fse-charcoal: #333333;
+            --fse-off-white: #F5F5F5;
+            --font-primary: Helvetica, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--fse-charcoal);
+            background: #FFFFFF;
+            line-height: 1.7;
+        }
+
+        header {
+            background: var(--fse-burgundy);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            color: var(--fse-gold);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--fse-light-gold);
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        h2 {
+            font-family: var(--font-primary);
+            font-weight: 700;
+            color: var(--fse-burgundy);
+            font-size: 2rem;
+            margin: 3rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-family: var(--font-primary);
+            font-weight: 700;
+            color: var(--fse-dark-burgundy);
+            font-size: 1.5rem;
+            margin: 2.5rem 0 1rem 0;
+        }
+
+        h4 {
+            font-family: var(--font-primary);
+            font-weight: 700;
+            color: var(--fse-burgundy);
+            font-size: 1.2rem;
+            margin: 2rem 0 1rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .intro-box {
+            background: var(--fse-off-white);
+            border-left: 4px solid var(--fse-gold);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+        }
+
+        .concept-box {
+            background: var(--fse-off-white);
+            border-left: 4px solid var(--fse-burgundy);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .concept-box h4 {
+            margin-top: 0;
+            color: var(--fse-burgundy);
+        }
+
+        pre {
+            background: #2C3E50;
+            color: #FFFFFF;
+            padding: 1.5rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--fse-gold);
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .line-explanation {
+            background: white;
+            border: 1px solid #E0E0E0;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .line-number {
+            display: inline-block;
+            background: var(--fse-burgundy);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+
+        .code-snippet {
+            background: #F8F9FA;
+            border-left: 3px solid var(--fse-gold);
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            border-radius: 3px;
+        }
+
+        .key-concept {
+            background: linear-gradient(135deg, var(--fse-burgundy) 0%, var(--fse-dark-burgundy) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin: 2rem 0;
+        }
+
+        .key-concept h4 {
+            color: var(--fse-gold);
+            margin-top: 0;
+        }
+
+        .key-concept p {
+            color: white;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            background: #FFF9E6;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            color: var(--fse-dark-burgundy);
+            font-weight: 600;
+        }
+
+        .warning {
+            background: #FFF4E6;
+            border-left: 4px solid #FF9800;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        footer {
+            background: var(--fse-burgundy);
+            color: var(--fse-gold);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+
+        .toc {
+            background: var(--fse-off-white);
+            padding: 2rem;
+            border-radius: 6px;
+            margin: 2rem 0;
+        }
+
+        .toc h3 {
+            color: var(--fse-burgundy);
+            margin-top: 0;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .toc li {
+            margin: 0.5rem 0;
+        }
+
+        .toc a {
+            color: var(--fse-dark-burgundy);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .toc a:hover {
+            color: var(--fse-gold);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <div class="logo">FSE Solutions</div>
+        <h1>MerchantOfVenice Smart Contract</h1>
+        <p class="subtitle">Complete Line by Line Explanation for Beginners</p>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="intro-box">
+        <h3>About This Document</h3>
+        <p>This guide provides a comprehensive explanation of the MerchantOfVenice Solidity smart contract. Every line is explained in clear language suitable for blockchain developers who are new to Solidity. Special attention is given to explaining Solidity-specific syntax like modifiers, the underscore notation, emit statements, and access control patterns.</p>
+    </div>
+
+    <div class="toc">
+        <h3>Table of Contents</h3>
+        <ul>
+            <li><a href="#overview">Contract Overview</a></li>
+            <li><a href="#header">License and Pragma</a></li>
+            <li><a href="#parties">Parties (State Variables)</a></li>
+            <li><a href="#financial">Financial Terms</a></li>
+            <li><a href="#deadlines">Deadlines and Time Windows</a></li>
+            <li><a href="#state">State Flags</a></li>
+            <li><a href="#reentrancy">Reentrancy Guard</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#modifiers">Modifiers and the Underscore</a></li>
+            <li><a href="#constructor">Constructor</a></li>
+            <li><a href="#functions">Core Functions</a></li>
+            <li><a href="#view">View Functions</a></li>
+        </ul>
+    </div>
+
+    <section id="overview">
+        <h2>Contract Overview</h2>
+        <p>The MerchantOfVenice contract implements a secured lending escrow system where:</p>
+        <ul>
+            <li><strong>Shylock</strong> (the lender) sets the loan terms when deploying the contract</li>
+            <li><strong>Antonio</strong> (the borrower) deposits collateral worth twice the loan amount</li>
+            <li><strong>Shylock</strong> then sends the loan directly to Antonio</li>
+            <li><strong>Antonio</strong> must repay before the deadline to recover his collateral</li>
+            <li>If Antonio defaults, Shylock claims the full collateral</li>
+        </ul>
+        
+        <div class="key-concept">
+            <h4>Core Design Principle</h4>
+            <p>Every ETH that enters the contract has a defined exit path. No funds can ever be stranded. This is achieved through careful state management and enforced sequencing via modifiers.</p>
+        </div>
+    </section>
+
+    <section id="header">
+        <h2>License and Pragma Declaration</h2>
+
+        <div class="line-explanation">
+            <div class="code-snippet">// SPDX-License-Identifier: MIT</div>
+            <p><span class="line-number">Line 1</span> This comment specifies the software license under which this code is released. The SPDX (Software Package Data Exchange) standard provides a consistent way to declare licenses. MIT is a permissive open source license that allows anyone to use, modify, and distribute this code.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">pragma solidity ^0.8.20;</div>
+            <p><span class="line-number">Line 2</span> The <span class="highlight">pragma</span> directive tells the Solidity compiler which version to use. The caret symbol <span class="highlight">^</span> means "this version or any newer minor version but not the next major version." So <span class="highlight">^0.8.20</span> accepts 0.8.20, 0.8.21, 0.8.22, etc., but not 0.9.0.</p>
+            <p><strong>Why this matters:</strong> Solidity evolves rapidly, and different versions can have breaking changes. This declaration ensures your code compiles correctly.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">/// @title  MerchantOfVenice<br>/// @notice A fully on-chain secured lending escrow.</div>
+            <p><span class="line-number">Lines 4-5</span> These are <span class="highlight">NatSpec</span> (Natural Language Specification) comments. The triple slash <span class="highlight">///</span> indicates documentation that tools can extract to generate human-readable documentation.</p>
+            <ul>
+                <li><span class="highlight">@title</span> provides the contract name</li>
+                <li><span class="highlight">@notice</span> gives a high level description for end users</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="parties">
+        <h2>Parties (State Variables)</h2>
+
+        <div class="concept-box">
+            <h4>What Are State Variables?</h4>
+            <p>State variables are permanently stored on the blockchain. They persist between function calls and cost gas to write. Think of them as the contract's permanent memory.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">address public shylock;</div>
+            <p><span class="line-number">Line 33</span> Declares a state variable named <span class="highlight">shylock</span> of type <span class="highlight">address</span> with <span class="highlight">public</span> visibility.</p>
+            <ul>
+                <li><span class="highlight">address</span> is an Ethereum wallet address (20 bytes, e.g., 0x1234...)</li>
+                <li><span class="highlight">public</span> means Solidity automatically creates a getter function so anyone can read this value</li>
+                <li>This stores the lender's wallet address</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">address public antonio;</div>
+            <p><span class="line-number">Line 36</span> Stores the borrower's wallet address, also publicly readable. Same structure as the shylock variable above.</p>
+        </div>
+    </section>
+
+    <section id="financial">
+        <h2>Financial Terms</h2>
+
+        <div class="line-explanation">
+            <div class="code-snippet">uint256 public loanAmount;</div>
+            <p><span class="line-number">Line 44</span> Declares an unsigned 256-bit integer to store the loan amount in <span class="highlight">wei</span> (the smallest unit of ETH).</p>
+            <ul>
+                <li><span class="highlight">uint256</span> means a whole number from 0 to 2<sup>256</sup>-1 (very large)</li>
+                <li>1 ETH = 10<sup>18</sup> wei</li>
+                <li><span class="highlight">public</span> again means readable by anyone</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">uint256 public collateralAmount;</div>
+            <p><span class="line-number">Line 49</span> Stores the collateral amount, which will be set to exactly twice the loan amount. Also in wei, also publicly readable.</p>
+        </div>
+    </section>
+
+    <section id="deadlines">
+        <h2>Deadlines and Time Windows</h2>
+
+        <div class="concept-box">
+            <h4>How Blockchain Time Works</h4>
+            <p>Solidity uses Unix timestamps (seconds since January 1, 1970). The current blockchain time is available via <span class="highlight">block.timestamp</span>. Deadlines are stored as Unix timestamps.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">uint256 public depositDeadline;</div>
+            <p><span class="line-number">Line 58</span> Stores the Unix timestamp by which Antonio must deposit collateral. Set when the contract is deployed. After this time, Antonio can no longer deposit.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">uint256 public disbursementDeadline;</div>
+            <p><span class="line-number">Line 62</span> Stores when Shylock must send the loan. This is set when Antonio deposits collateral. If Shylock misses this deadline, Antonio can reclaim his collateral.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">uint256 public repaymentDeadline;</div>
+            <p><span class="line-number">Line 66</span> Stores when Antonio must repay the loan. Set when Shylock disburses the loan. If Antonio misses this deadline, Shylock can claim the collateral.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">uint256 public depositWindowSeconds;<br>uint256 public disbursementWindowSeconds;<br>uint256 public repaymentWindowSeconds;</div>
+            <p><span class="line-number">Lines 74-76</span> These store the duration of each window in seconds. Unlike the deadline timestamps above, these store durations (how long, not when). They are set at deployment and used to calculate the actual deadlines.</p>
+        </div>
+    </section>
+
+    <section id="state">
+        <h2>State Flags</h2>
+
+        <div class="concept-box">
+            <h4>What Are Boolean Flags?</h4>
+            <p>Boolean variables store either <span class="highlight">true</span> or <span class="highlight">false</span>. They track whether something has happened. In Solidity, booleans default to false if not explicitly set.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">bool public collateralDeposited;</div>
+            <p><span class="line-number">Line 84</span> Tracks whether Antonio has deposited the required collateral. Starts as <span class="highlight">false</span>, becomes <span class="highlight">true</span> when Antonio calls depositCollateral().</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">bool public disbursed;</div>
+            <p><span class="line-number">Line 87</span> Tracks whether Shylock has sent the loan to Antonio. Starts as <span class="highlight">false</span>, becomes <span class="highlight">true</span> when Shylock calls disburseLoan().</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">bool public settled;</div>
+            <p><span class="line-number">Line 91</span> Tracks whether the contract has reached its final state. Once <span class="highlight">true</span>, no further functions can be called. This is the "circuit breaker" that prevents any action after the contract completes.</p>
+        </div>
+    </section>
+
+    <section id="reentrancy">
+        <h2>Reentrancy Guard</h2>
+
+        <div class="key-concept">
+            <h4>Understanding Reentrancy Attacks</h4>
+            <p>A reentrancy attack happens when a malicious contract calls back into your contract before the first call finishes. This can allow attackers to drain funds. The reentrancy guard prevents this.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">bool private _locked;</div>
+            <p><span class="line-number">Line 98</span> A private boolean flag used for the reentrancy guard. <span class="highlight">private</span> means only this contract can access it (unlike <span class="highlight">public</span>). The underscore prefix is a naming convention for internal variables.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier nonReentrant() {<br>    require(!_locked, "Reentrant call");<br>    _locked = true;<br>    _;<br>    _locked = false;<br>}</div>
+            <p><span class="line-number">Lines 100-105</span> This is a <span class="highlight">modifier</span> that prevents reentrancy.</p>
+            
+            <p><strong>Breaking it down:</strong></p>
+            <ol>
+                <li><span class="highlight">require(!_locked, "Reentrant call");</span> → If already locked, reject the call with error message</li>
+                <li><span class="highlight">_locked = true;</span> → Set the lock before executing the function</li>
+                <li><span class="highlight">_;</span> → <strong>THE UNDERSCORE</strong> is where the actual function body runs (more below)</li>
+                <li><span class="highlight">_locked = false;</span> → Release the lock after function completes</li>
+            </ol>
+        </div>
+
+        <div class="concept-box">
+            <h4>The Underscore _ Explained</h4>
+            <p>The underscore <span class="highlight">_;</span> is a special placeholder in modifiers. It represents "execute the function body here." When you attach a modifier to a function, Solidity inserts the function's code at the position of the underscore.</p>
+            
+            <p><strong>Example:</strong></p>
+            <pre><code>function myFunction() public nonReentrant {
+    // function body
+}</code></pre>
+            
+            <p>This is equivalent to:</p>
+            <pre><code>function myFunction() public {
+    require(!_locked, "Reentrant call");
+    _locked = true;
+    
+    // function body runs here
+    
+    _locked = false;
+}</code></pre>
+            
+            <p>The modifier "wraps" your function code with setup (before _) and cleanup (after _).</p>
+        </div>
+    </section>
+
+    <section id="events">
+        <h2>Events</h2>
+
+        <div class="concept-box">
+            <h4>What Are Events?</h4>
+            <p>Events are Solidity's way of logging information that external applications can listen to. When you <span class="highlight">emit</span> an event, it is recorded in the blockchain's transaction log. Frontend applications, block explorers, and indexers can watch for these events.</p>
+            <p><strong>Key point:</strong> Events do not cost much gas and are not accessible from within smart contracts. They are for off-chain consumption only.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">event ContractCreated(<br>    address indexed shylock,<br>    address indexed antonio,<br>    uint256 loanAmount,<br>    uint256 collateralAmount,<br>    uint256 depositDeadline<br>);</div>
+            <p><span class="line-number">Lines 113-119</span> Declares an event that will be emitted when the contract is deployed.</p>
+            
+            <p><strong>Breaking down the syntax:</strong></p>
+            <ul>
+                <li><span class="highlight">event</span> → keyword to declare an event</li>
+                <li><span class="highlight">ContractCreated</span> → the event name (convention: PascalCase)</li>
+                <li>The parentheses contain the parameters that will be logged</li>
+                <li><span class="highlight">indexed</span> → makes these parameters searchable (you can filter events by indexed values). Maximum 3 indexed parameters per event.</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">event CollateralDeposited(uint256 amount, uint256 disbursementDeadline);</div>
+            <p><span class="line-number">Line 122</span> Event emitted when Antonio deposits collateral. Records the amount and the new disbursement deadline. No indexed parameters here, so you cannot efficiently search by these values.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">event LoanDisbursed(uint256 amount, uint256 repaymentDeadline);</div>
+            <p><span class="line-number">Line 125</span> Event emitted when Shylock sends the loan. Records the loan amount and repayment deadline.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">event LoanRepaid(uint256 repaymentAmount, uint256 collateralReturned);</div>
+            <p><span class="line-number">Line 128</span> Event emitted when Antonio successfully repays. Records both the repayment and the collateral being returned.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">event CollateralReclaimed(uint256 amount);</div>
+            <p><span class="line-number">Line 131</span> Event emitted when Antonio reclaims collateral because Shylock failed to disburse on time.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">event BondForfeited(uint256 amount);</div>
+            <p><span class="line-number">Line 134</span> Event emitted when Shylock claims the collateral because Antonio defaulted.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">event ContractCancelled();</div>
+            <p><span class="line-number">Line 137</span> Event emitted when Shylock cancels because Antonio never deposited collateral. No parameters because nothing interesting happened.</p>
+        </div>
+
+        <div class="key-concept">
+            <h4>How emit Works</h4>
+            <p>Later in the contract, you will see lines like:</p>
+            <pre><code>emit ContractCreated(msg.sender, _antonio, _loanAmount, ...);</code></pre>
+            <p>The <span class="highlight">emit</span> keyword triggers the event and writes it to the blockchain logs. The values in parentheses must match the event declaration exactly (same types, same order).</p>
+        </div>
+    </section>
+
+    <section id="modifiers">
+        <h2>Modifiers and Access Control</h2>
+
+        <div class="concept-box">
+            <h4>What Is a Modifier?</h4>
+            <p>A modifier is reusable code that runs before (and optionally after) a function. It is like a "wrapper" around your function. Modifiers are used for access control, state validation, and preconditions.</p>
+            <p>Remember the underscore <span class="highlight">_;</span> represents where the actual function code runs.</p>
+        </div>
+
+        <h3>Access Control Modifiers</h3>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier onlyShylock() {<br>    require(msg.sender == shylock, "Only Shylock may call this");<br>    _;<br>}</div>
+            <p><span class="line-number">Lines 145-148</span> Restricts function access to Shylock only.</p>
+            
+            <p><strong>Breaking it down:</strong></p>
+            <ul>
+                <li><span class="highlight">msg.sender</span> → the wallet address that called this function</li>
+                <li><span class="highlight">require(condition, "error message")</span> → if the condition is false, revert the transaction with the error message</li>
+                <li>If <span class="highlight">msg.sender == shylock</span> is true, execution proceeds to <span class="highlight">_;</span> where the function body runs</li>
+                <li>If false, the transaction reverts immediately with "Only Shylock may call this"</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier onlyAntonio() {<br>    require(msg.sender == antonio, "Only Antonio may call this");<br>    _;<br>}</div>
+            <p><span class="line-number">Lines 150-153</span> Same pattern as onlyShylock, but checks for Antonio's address. Only Antonio can call functions with this modifier.</p>
+        </div>
+
+        <h3>State Validation Modifiers</h3>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier notSettled() {<br>    require(!settled, "Contract already settled");<br>    _;<br>}</div>
+            <p><span class="line-number">Lines 161-164</span> Ensures the contract has not reached its final state.</p>
+            <ul>
+                <li><span class="highlight">!settled</span> → the exclamation mark means "not", so this checks that settled is false</li>
+                <li>Once settled becomes true, any function with this modifier will revert</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier hasCollateral() {<br>    require(collateralDeposited, "Collateral not yet deposited");<br>    _;<br>}</div>
+            <p><span class="line-number">Lines 166-169</span> Requires that collateral has been deposited. Functions with this modifier can only be called after Antonio deposits.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier notDisbursed() {<br>    require(!disbursed, "Loan already disbursed");<br>    _;<br>}</div>
+            <p><span class="line-number">Lines 171-174</span> Ensures the loan has not been sent yet. Prevents duplicate disbursement.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier isDisbursed() {<br>    require(disbursed, "Loan not yet disbursed");<br>    _;<br>}</div>
+            <p><span class="line-number">Lines 176-179</span> Opposite of notDisbursed. Requires that the loan has been sent. Used for repayment and default functions.</p>
+        </div>
+
+        <h3>Time Based Modifiers</h3>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier beforeDepositDeadline() {<br>    require(block.timestamp <= depositDeadline, "Deposit window has closed");<br>    _;<br>}</div>
+            <p><span class="line-number">Lines 187-190</span> Ensures the function is called before the deposit deadline.</p>
+            <ul>
+                <li><span class="highlight">block.timestamp</span> → current Unix timestamp of the block being mined</li>
+                <li><span class="highlight"><=</span> → less than or equal to</li>
+                <li>If current time is after the deadline, transaction reverts</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier afterDepositDeadline() {<br>    require(block.timestamp > depositDeadline, "Deposit window still open");<br>    _;<br>}</div>
+            <p><span class="line-number">Lines 192-195</span> Opposite of beforeDepositDeadline. Ensures the function is called after the deadline has passed.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier beforeDisbursementDeadline() {<br>    require(block.timestamp <= disbursementDeadline, "Disbursement window has closed");<br>    _;<br>}</div>
+            <p><span class="line-number">Lines 197-200</span> Function must be called before the disbursement deadline.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier afterDisbursementDeadline() {<br>    require(block.timestamp > disbursementDeadline, "Disbursement window still open");<br>    _;<br>}</div>
+            <p><span class="line-number">Lines 202-205</span> Function must be called after disbursement deadline passes.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier beforeRepaymentDeadline() {<br>    require(block.timestamp <= repaymentDeadline, "Repayment window has closed");<br>    _;<br>}</div>
+            <p><span class="line-number">Lines 207-210</span> Function must be called before the repayment deadline.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">modifier afterRepaymentDeadline() {<br>    require(block.timestamp > repaymentDeadline, "Repayment window not yet closed");<br>    _;<br>}</div>
+            <p><span class="line-number">Lines 212-215</span> Function must be called after repayment deadline has passed. Used for Shylock to claim defaulted collateral.</p>
+        </div>
+
+        <div class="key-concept">
+            <h4>Stacking Modifiers</h4>
+            <p>Functions can have multiple modifiers. They execute in order from top to bottom. For example:</p>
+            <pre><code>function myFunction()
+    external
+    onlyAntonio
+    notSettled
+    beforeDeadline
+{
+    // function body
+}</code></pre>
+            <p>This function checks: (1) caller is Antonio, (2) contract not settled, (3) before deadline, then runs the function body.</p>
+        </div>
+    </section>
+
+    <section id="constructor">
+        <h2>Constructor</h2>
+
+        <div class="concept-box">
+            <h4>What Is a Constructor?</h4>
+            <p>The constructor is a special function that runs exactly once when the contract is deployed to the blockchain. It initializes the contract's state. After deployment, the constructor can never be called again.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">constructor(<br>    address _antonio,<br>    uint256 _loanAmount,<br>    uint256 _depositWindowSeconds,<br>    uint256 _disbursementWindowSeconds,<br>    uint256 _repaymentWindowSeconds<br>)</div>
+            <p><span class="line-number">Lines 230-236</span> The constructor function signature.</p>
+            <ul>
+                <li><span class="highlight">constructor</span> → special keyword for the initialization function</li>
+                <li>Takes 5 parameters: Antonio's address and four timing values</li>
+                <li>Parameters prefixed with underscore (_antonio, _loanAmount, etc.) is a naming convention to distinguish them from state variables</li>
+                <li>No visibility keyword (public/private) on constructors in modern Solidity</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">require(_antonio != address(0), "Invalid Antonio address");</div>
+            <p><span class="line-number">Line 237</span> Validates that Antonio's address is not the zero address (0x0000...0000).</p>
+            <ul>
+                <li><span class="highlight">address(0)</span> → the zero address, used as a null/invalid address</li>
+                <li><span class="highlight">!=</span> → not equal to</li>
+                <li>Prevents deploying a contract with an invalid borrower address</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">require(_loanAmount > 0, "Loan amount must be positive");</div>
+            <p><span class="line-number">Line 238</span> Ensures the loan amount is greater than zero. You cannot create a loan for 0 wei.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">require(_depositWindowSeconds > 0, "Deposit window must be positive");<br>require(_disbursementWindowSeconds > 0, "Disbursement window must be positive");<br>require(_repaymentWindowSeconds > 0, "Repayment window must be positive");</div>
+            <p><span class="line-number">Lines 239-241</span> Validates that all three time windows are positive numbers. Cannot have a zero second window.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">shylock = msg.sender;</div>
+            <p><span class="line-number">Line 243</span> Sets the lender to whoever deployed the contract.</p>
+            <ul>
+                <li><span class="highlight">msg.sender</span> → in the constructor, this is the address that deployed the contract</li>
+                <li>Assignment operator <span class="highlight">=</span> stores the value in the state variable</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">antonio = _antonio;</div>
+            <p><span class="line-number">Line 244</span> Stores Antonio's address from the constructor parameter into the state variable.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">loanAmount = _loanAmount;</div>
+            <p><span class="line-number">Line 245</span> Stores the loan amount in the state variable.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">collateralAmount = _loanAmount * 2;</div>
+            <p><span class="line-number">Line 246</span> Calculates and stores the collateral amount as exactly twice the loan.</p>
+            <ul>
+                <li><span class="highlight">*</span> → multiplication operator</li>
+                <li>This enforces the 2:1 collateral ratio at deployment time</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">depositWindowSeconds = _depositWindowSeconds;<br>disbursementWindowSeconds = _disbursementWindowSeconds;<br>repaymentWindowSeconds = _repaymentWindowSeconds;</div>
+            <p><span class="line-number">Lines 247-249</span> Stores all three window durations. These are kept for reference but the actual deadlines are calculated when needed.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">depositDeadline = block.timestamp + _depositWindowSeconds;</div>
+            <p><span class="line-number">Line 250</span> Calculates when Antonio's deposit window closes.</p>
+            <ul>
+                <li><span class="highlight">block.timestamp</span> → current Unix timestamp (deployment time)</li>
+                <li><span class="highlight">+</span> → addition</li>
+                <li>If deployed at timestamp 1000 with a 3600 second window, depositDeadline becomes 4600</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">emit ContractCreated(<br>    msg.sender,<br>    _antonio,<br>    _loanAmount,<br>    _loanAmount * 2,<br>    depositDeadline<br>);</div>
+            <p><span class="line-number">Lines 252-258</span> Emits the ContractCreated event to the blockchain logs.</p>
+            <ul>
+                <li><span class="highlight">emit</span> → keyword to trigger an event</li>
+                <li>Values passed must match the event declaration exactly</li>
+                <li>This creates a permanent record that this contract was created with these terms</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="functions">
+        <h2>Core Functions</h2>
+
+        <h3>Safe ETH Transfer Helper</h3>
+
+        <div class="line-explanation">
+            <div class="code-snippet">function _safeTransfer(address to, uint256 value) internal {<br>    (bool success, ) = payable(to).call{value: value}("");<br>    require(success, "ETH transfer failed");<br>}</div>
+            <p><span class="line-number">Lines 268-271</span> A helper function to safely send ETH.</p>
+            
+            <p><strong>Breaking down each part:</strong></p>
+            <ul>
+                <li><span class="highlight">internal</span> → only this contract can call this function</li>
+                <li><span class="highlight">payable(to)</span> → converts the address to a payable address (can receive ETH)</li>
+                <li><span class="highlight">.call{value: value}("")</span> → low level call that sends <span class="highlight">value</span> wei to address <span class="highlight">to</span></li>
+                <li><span class="highlight">(bool success, )</span> → the call returns two values; we capture success and ignore the second with a blank</li>
+                <li><span class="highlight">require(success, ...)</span> → if the transfer failed, revert the entire transaction</li>
+            </ul>
+            
+            <p><strong>Why not use .transfer()?</strong> Older Solidity used address.transfer() but it only forwards 2300 gas, which can fail with smart contract wallets. This method forwards all available gas and is safer.</p>
+        </div>
+
+        <h3>depositCollateral Function</h3>
+
+        <div class="line-explanation">
+            <div class="code-snippet">function depositCollateral()<br>    external<br>    payable<br>    onlyAntonio<br>    notSettled<br>    notDisbursed<br>    beforeDepositDeadline<br>    nonReentrant</div>
+            <p><span class="line-number">Lines 279-286</span> Function signature and modifiers for Antonio to deposit collateral.</p>
+            
+            <p><strong>Each keyword explained:</strong></p>
+            <ul>
+                <li><span class="highlight">external</span> → can only be called from outside the contract (not from other functions inside)</li>
+                <li><span class="highlight">payable</span> → this function can receive ETH. Without this, sending ETH would revert</li>
+                <li><span class="highlight">onlyAntonio</span> → only Antonio's wallet can call this</li>
+                <li><span class="highlight">notSettled</span> → contract must not be in final state</li>
+                <li><span class="highlight">notDisbursed</span> → loan must not have been sent yet</li>
+                <li><span class="highlight">beforeDepositDeadline</span> → must be called before the deposit window closes</li>
+                <li><span class="highlight">nonReentrant</span> → prevents reentrancy attacks</li>
+            </ul>
+            
+            <p><strong>Execution order:</strong> All modifiers run first (in order), then the function body runs at the underscore position.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">require(!collateralDeposited, "Collateral already deposited");</div>
+            <p><span class="line-number">Line 288</span> Extra check to prevent double deposit. Even though we have the notDisbursed modifier, this provides a more specific error message.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">require(msg.value == collateralAmount, "Must deposit exactly twice the loan amount");</div>
+            <p><span class="line-number">Line 289</span> Validates the amount of ETH sent with this transaction.</p>
+            <ul>
+                <li><span class="highlight">msg.value</span> → the amount of wei sent with this transaction</li>
+                <li><span class="highlight">==</span> → equality check (must be exactly equal, not more, not less)</li>
+                <li>If Antonio sends the wrong amount, transaction reverts</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">collateralDeposited = true;</div>
+            <p><span class="line-number">Line 291</span> Sets the flag to record that collateral has been deposited. This enables functions that require hasCollateral modifier.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">disbursementDeadline = block.timestamp + disbursementWindowSeconds;</div>
+            <p><span class="line-number">Line 292</span> Calculates when Shylock's disbursement window closes. The clock starts now, when collateral is deposited.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">emit CollateralDeposited(msg.value, disbursementDeadline);</div>
+            <p><span class="line-number">Line 294</span> Logs the deposit event with the amount deposited and the new deadline.</p>
+        </div>
+
+        <h3>disburseLoan Function</h3>
+
+        <div class="line-explanation">
+            <div class="code-snippet">function disburseLoan()<br>    external<br>    payable<br>    onlyShylock<br>    notSettled<br>    hasCollateral<br>    notDisbursed<br>    beforeDisbursementDeadline<br>    nonReentrant</div>
+            <p><span class="line-number">Lines 301-309</span> Function for Shylock to send the loan to Antonio.</p>
+            
+            <p><strong>Modifiers enforce the correct sequence:</strong></p>
+            <ul>
+                <li><span class="highlight">onlyShylock</span> → only the lender can call this</li>
+                <li><span class="highlight">hasCollateral</span> → Antonio must have deposited first</li>
+                <li><span class="highlight">notDisbursed</span> → prevents sending the loan twice</li>
+                <li><span class="highlight">beforeDisbursementDeadline</span> → Shylock must act within his window</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">require(msg.value == loanAmount, "Must disburse exactly the loan amount");</div>
+            <p><span class="line-number">Line 311</span> Shylock must send exactly the loan amount (no more, no less).</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">disbursed = true;</div>
+            <p><span class="line-number">Line 313</span> Records that the loan has been sent.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">repaymentDeadline = block.timestamp + repaymentWindowSeconds;</div>
+            <p><span class="line-number">Line 314</span> Starts the repayment clock for Antonio. He must repay before this deadline.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">_safeTransfer(antonio, loanAmount);</div>
+            <p><span class="line-number">Line 316</span> Sends the loan ETH directly to Antonio. The contract never holds both the collateral and loan simultaneously. The loan ETH passes through immediately.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">emit LoanDisbursed(loanAmount, repaymentDeadline);</div>
+            <p><span class="line-number">Line 318</span> Logs the disbursement event.</p>
+        </div>
+
+        <h3>repay Function</h3>
+
+        <div class="line-explanation">
+            <div class="code-snippet">function repay()<br>    external<br>    payable<br>    onlyAntonio<br>    notSettled<br>    isDisbursed<br>    beforeRepaymentDeadline<br>    nonReentrant</div>
+            <p><span class="line-number">Lines 325-332</span> Antonio repays the loan to recover his collateral.</p>
+            
+            <p><strong>Modifiers ensure correct state:</strong></p>
+            <ul>
+                <li><span class="highlight">isDisbursed</span> → loan must have been sent already</li>
+                <li><span class="highlight">beforeRepaymentDeadline</span> → Antonio must repay on time</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">require(msg.value == loanAmount, "Must repay exactly the loan amount");</div>
+            <p><span class="line-number">Line 334</span> Antonio must send back exactly the loan amount.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">settled = true;</div>
+            <p><span class="line-number">Line 336</span> Marks the contract as finished. This is done BEFORE any ETH transfers (Checks Effects Interactions pattern for security).</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">_safeTransfer(antonio, collateralAmount);<br>_safeTransfer(shylock, loanAmount);</div>
+            <p><span class="line-number">Lines 338-339</span> Returns collateral to Antonio and forwards repayment to Shylock. Both parties get their ETH in the same transaction.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">emit LoanRepaid(loanAmount, collateralAmount);</div>
+            <p><span class="line-number">Line 341</span> Logs successful repayment.</p>
+        </div>
+
+        <h3>reclaimCollateral Function</h3>
+
+        <div class="line-explanation">
+            <div class="code-snippet">function reclaimCollateral()<br>    external<br>    onlyAntonio<br>    notSettled<br>    hasCollateral<br>    notDisbursed<br>    afterDisbursementDeadline<br>    nonReentrant</div>
+            <p><span class="line-number">Lines 346-353</span> Antonio gets his collateral back if Shylock failed to disburse the loan on time.</p>
+            
+            <p><strong>The timing logic:</strong></p>
+            <ul>
+                <li><span class="highlight">hasCollateral</span> → Antonio deposited</li>
+                <li><span class="highlight">notDisbursed</span> → Shylock never sent the loan</li>
+                <li><span class="highlight">afterDisbursementDeadline</span> → Shylock's window has closed</li>
+            </ul>
+            <p>This protects Antonio if Shylock backs out.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">settled = true;<br>_safeTransfer(antonio, collateralAmount);</div>
+            <p><span class="line-number">Lines 355-356</span> Marks contract as finished and returns all collateral to Antonio.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">emit CollateralReclaimed(collateralAmount);</div>
+            <p><span class="line-number">Line 358</span> Logs that Antonio reclaimed his deposit.</p>
+        </div>
+
+        <h3>claimBond Function</h3>
+
+        <div class="line-explanation">
+            <div class="code-snippet">function claimBond()<br>    external<br>    onlyShylock<br>    notSettled<br>    isDisbursed<br>    afterRepaymentDeadline<br>    nonReentrant</div>
+            <p><span class="line-number">Lines 364-370</span> Shylock claims the collateral when Antonio defaults.</p>
+            
+            <p><strong>The default logic:</strong></p>
+            <ul>
+                <li><span class="highlight">isDisbursed</span> → Shylock sent the loan</li>
+                <li><span class="highlight">afterRepaymentDeadline</span> → Antonio's time to repay has expired</li>
+            </ul>
+            <p>Shylock gets the full collateral (2x the loan). Antonio keeps the loan ETH but loses his collateral.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">settled = true;<br>_safeTransfer(shylock, collateralAmount);</div>
+            <p><span class="line-number">Lines 372-373</span> Finalizes contract and sends all collateral to Shylock.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">emit BondForfeited(collateralAmount);</div>
+            <p><span class="line-number">Line 375</span> Logs that collateral was forfeited due to default.</p>
+        </div>
+
+        <h3>cancel Function</h3>
+
+        <div class="line-explanation">
+            <div class="code-snippet">function cancel()<br>    external<br>    onlyShylock<br>    notSettled<br>    afterDepositDeadline<br>    nonReentrant</div>
+            <p><span class="line-number">Lines 380-385</span> Shylock cancels if Antonio never deposited collateral.</p>
+            
+            <p><strong>When this is used:</strong></p>
+            <ul>
+                <li>Deposit deadline has passed</li>
+                <li>Antonio never deposited anything</li>
+                <li>No ETH is in the contract</li>
+            </ul>
+            <p>This allows Shylock to formally close the contract without waiting forever.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">require(!collateralDeposited, "Collateral deposited use reclaimCollateral path");</div>
+            <p><span class="line-number">Line 387</span> Double checks that no collateral was deposited. If there was collateral, Antonio should use reclaimCollateral instead.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">settled = true;</div>
+            <p><span class="line-number">Line 389</span> Marks contract as finished. No ETH transfers because no ETH was ever deposited.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">emit ContractCancelled();</div>
+            <p><span class="line-number">Line 391</span> Logs the cancellation.</p>
+        </div>
+    </section>
+
+    <section id="view">
+        <h2>View Functions</h2>
+
+        <div class="concept-box">
+            <h4>What Are View Functions?</h4>
+            <p>Functions marked <span class="highlight">view</span> promise not to modify any state. They only read data and return it. Calling view functions is free (no gas cost) when called externally because they don't create transactions.</p>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">function timeToDepositDeadline() external view returns (uint256) {<br>    if (block.timestamp >= depositDeadline) return 0;<br>    return depositDeadline - block.timestamp;<br>}</div>
+            <p><span class="line-number">Lines 400-403</span> Returns how many seconds remain until the deposit deadline.</p>
+            
+            <p><strong>Breaking down the logic:</strong></p>
+            <ul>
+                <li><span class="highlight">external view</span> → can be called from outside, reads only</li>
+                <li><span class="highlight">returns (uint256)</span> → specifies this function returns an unsigned integer</li>
+                <li><span class="highlight">if (block.timestamp >= depositDeadline)</span> → if deadline has passed</li>
+                <li><span class="highlight">return 0;</span> → return 0 seconds remaining</li>
+                <li><span class="highlight">return depositDeadline - block.timestamp;</span> → otherwise subtract current time from deadline</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">function timeToDisbursementDeadline() external view returns (uint256) {<br>    if (!collateralDeposited) return 0;<br>    if (block.timestamp >= disbursementDeadline) return 0;<br>    return disbursementDeadline - block.timestamp;<br>}</div>
+            <p><span class="line-number">Lines 407-411</span> Returns seconds until disbursement deadline.</p>
+            <ul>
+                <li>Returns 0 if collateral was never deposited (deadline never set)</li>
+                <li>Returns 0 if deadline has passed</li>
+                <li>Otherwise returns seconds remaining</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">function timeToRepaymentDeadline() external view returns (uint256) {<br>    if (!disbursed) return 0;<br>    if (block.timestamp >= repaymentDeadline) return 0;<br>    return repaymentDeadline - block.timestamp;<br>}</div>
+            <p><span class="line-number">Lines 415-419</span> Returns seconds until repayment deadline.</p>
+            <ul>
+                <li>Returns 0 if loan was never disbursed (deadline never set)</li>
+                <li>Returns 0 if deadline has passed</li>
+                <li>Otherwise returns seconds remaining</li>
+            </ul>
+        </div>
+
+        <div class="line-explanation">
+            <div class="code-snippet">function getBalance() external view returns (uint256) {<br>    return address(this).balance;<br>}</div>
+            <p><span class="line-number">Lines 423-425</span> Returns the contract's current ETH balance in wei.</p>
+            <ul>
+                <li><span class="highlight">address(this)</span> → the address of this contract itself</li>
+                <li><span class="highlight">.balance</span> → built in property that returns the ETH balance</li>
+            </ul>
+            <p>Useful for verifying the contract holds the expected collateral amount.</p>
+        </div>
+    </section>
+
+    <div class="key-concept" style="margin-top: 4rem;">
+        <h4>Summary: Key Solidity Concepts Covered</h4>
+        <ol>
+            <li><strong>State variables</strong> → permanent storage on blockchain (address, uint256, bool)</li>
+            <li><strong>Modifiers</strong> → reusable code wrappers with the underscore (_) placeholder</li>
+            <li><strong>Events</strong> → logging mechanism using emit keyword</li>
+            <li><strong>require()</strong> → input validation that reverts on failure</li>
+            <li><strong>msg.sender</strong> → the address calling the function</li>
+            <li><strong>msg.value</strong> → the amount of ETH sent with the call</li>
+            <li><strong>block.timestamp</strong> → current blockchain time</li>
+            <li><strong>payable</strong> → allows functions and addresses to receive ETH</li>
+            <li><strong>external vs internal</strong> → who can call the function</li>
+            <li><strong>view</strong> → read only functions that cost no gas externally</li>
+        </ol>
+    </div>
+
+</div>
+
+<footer>
+    <p><strong>FSE Solutions</strong> · Geneva</p>
+    <p>Financial Technology Consulting · Blockchain Development</p>
+</footer>
+
+</body>
+</html>
